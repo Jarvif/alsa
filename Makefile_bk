@@ -1,0 +1,19 @@
+SRCDIR=.
+CC=/opt/arm-2011.03/bin/arm-none-linux-gnueabi-gcc 
+CFLAGS = -std=c99 -g -I /usr/local/arm-alsa-lib-install/include/
+LDFLAGS =-L /usr/local/arm-alsa-lib-install/lib -lasound
+TARGETS=lplay lrecord
+all: $(TARGETS)
+
+lplay:lplay.o sndwav_common.o wav_parser.o
+	$(CC)  $(CFLAGS) -o $@  $^ $(LDFLAGS)
+lrecord:lrecord.o sndwav_common.o wav_parser.o
+	$(CC)  $(CFLAGS) -o $@  $^ $(LDFLAGS)
+sndwav_common.o:sndwav_common.c
+	$(CC)  $(CFLAGS) -o $@ -c $< $(LDFLAGS)
+sndwav_parser.o:wav_parser.c
+	$(CC)  $(CFLAGS) -o $@ -c $< $(LDFLAGS)
+
+
+clean:
+	rm -f *.o ${TARGETS}
